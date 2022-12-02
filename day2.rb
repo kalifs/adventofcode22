@@ -7,19 +7,19 @@ PAPER = 2
 SCISSORS = 3
 OUTCOMES = {
   "A" => {   # Rock
-    "X" => ROCK + DRAW, # Rock
-    "Y" => PAPER + WIN, # Paper
-    "Z" => SCISSORS + LOST  # Scissors
+    "X" => LOST + SCISSORS,
+    "Y" => DRAW + ROCK,
+    "Z" => WIN + PAPER
   },
   "B" => {   # Paper
-    "X" => ROCK + LOST, # Rock
-    "Y" => PAPER + DRAW, # Paper
-    "Z" => SCISSORS + WIN  # Scissors
+    "X" => LOST + ROCK,
+    "Y" => DRAW + PAPER,
+    "Z" => WIN + SCISSORS
   },
   "C" => { # Scissors
-    "X" => ROCK + WIN, # Rock
-    "Y" => PAPER + LOST, # Paper
-    "Z" => SCISSORS + DRAW  # Scissors
+    "X" => LOST + PAPER,
+    "Y" => DRAW + SCISSORS,
+    "Z" => WIN + ROCK
   }
 }
 
@@ -27,12 +27,7 @@ File.open(File.join(File.dirname(__FILE__),'day2.txt'), "r") do |f|
   points = 0
   f.each_line do |line|
     pair = line.chomp.split(" ")
-    begin
-      points += OUTCOMES[pair[0]][pair[1]]
-    rescue
-      p line
-      p pair
-    end
+    points += OUTCOMES[pair[0]][pair[1]]
   end
   p points
 end
