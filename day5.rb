@@ -19,10 +19,8 @@ File.open(File.join(File.dirname(__FILE__),'day5.txt'), "r") do |f|
     if !read_stack && line.chomp.strip != ""
       move_matches = line.match(/[^\d]*(\d+)[^\d]*(\d+)[^\d]*(\d+)/)
       moves = move_matches.to_a.slice(1..4).map(&:to_i)
-      moves[0].times do 
-        obj = stacks[moves[1] - 1].shift
-        stacks[moves[2] - 1].unshift(obj)
-      end
+      obj = stacks[moves[1] - 1].shift(moves[0])
+      stacks[moves[2] - 1].unshift(*obj)
     end
   end
 end
