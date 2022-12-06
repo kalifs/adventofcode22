@@ -1,5 +1,5 @@
 File.open(File.join(File.dirname(__FILE__),'day6.txt'), "r") do |f|
-  groupLen = 4
+  groupLen = 14
   f.each_line do |line|
     l = line.chomp
     i = groupLen
