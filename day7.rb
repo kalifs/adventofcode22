@@ -36,16 +36,16 @@ def totals(tree)
   sum 
 end
 
-def tally(tree, limit)
-  sum = 0
+def tally(tree, available, limit, min)
+  nmin = min
   tree.each do |(k, v)|
     if v.is_a?(Hash)
-      sum += tally(v, limit)
+      nmin = tally(v, available, limit, nmin)
     elsif k == "_total" 
-      sum += v if v <= limit
+      nmin = v if available + v >= limit && v < nmin       
     end
   end
-  sum
+  nmin
 end
 
 tree = {}
@@ -62,7 +62,6 @@ File.open(File.join(File.dirname(__FILE__),'day7.txt'), "r") do |f|
         root[part] = {} unless root[part]
         root = root[part]
       end
-      # p tree
     else
       content = get_content(input)
       dir = current_dir == "/" ? tree : tree.dig(*(current_dir.split("/").reject(&:empty?)))
@@ -71,5 +70,5 @@ File.open(File.join(File.dirname(__FILE__),'day7.txt'), "r") do |f|
   end
 
   totals(tree)
-  p tally(tree, 100_000)
+  p tally(tree, 70_000_000 - tree["_total"], 30_000_000, tree["_total"])
 end
