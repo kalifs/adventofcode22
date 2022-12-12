@@ -3,23 +3,22 @@ require 'matrix'
 
 def visibles(l)
   output = []
-  max = -1
+  
   l.each do |e|
-    output << (e > max )
-    max = e if e > max
+    vt = l.slice(0, output.size).reverse.take_while { |prev| prev < e }
+    output << (vt.size < output.size && output.size > 0 ? vt.size + 1 : vt.size)
   end
 
   output
 end
 
 def list_visibles(l)
-  o = visibles(l.reverse).reverse
-  visibles(l).map.with_index { |e, i| e || o[i]  }
+  v = visibles(l)
+  visibles(l.reverse).reverse.map.with_index {|e,i| e * v[i] }
 end
 
 File.open(File.join(File.dirname(__FILE__),'day8.txt'), "r") do |f|
   grid = []
-  og = []
   f.each_line do |line|
     grid << line.chomp.split("").map(&:to_i)
   end
@@ -28,9 +27,8 @@ File.open(File.join(File.dirname(__FILE__),'day8.txt'), "r") do |f|
   t_mapped = Matrix[*grid].transpose.to_a.map { |row| list_visibles(row) }
 
   result = g_mapped.map.with_index { |row, i|
-    row.map.with_index { |c, j| t_mapped[j][i] || c }
+    row.map.with_index { |c, j| t_mapped[j][i] * c }
   }
-
-  p result.reduce(0) {|sum, row| sum += row.reduce(0) {|isum, c| isum + (c ? 1 : 0)} }
+  p result.reduce(0) {|max, row| [max, row.max].max }
 end
 
