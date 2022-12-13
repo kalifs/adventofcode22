@@ -2,25 +2,25 @@ File.open(File.join(File.dirname(__FILE__),'day9.txt'), "r") do |f|
   cycles = 0
   x = 1
   xchange = 0
-  sum = 0
+  cchange = 0
   f.each_line do |line|
-    # puts "cmd: #{line}"
     input = line.chomp
-    # puts "before: x: #{x}"
-    
+    # puts input
     if input.start_with?("addx")
-      cycles += 2
+      cchange = 2
       xchange = input.split(" ").last.to_i
     else 
-      cycles += 1
+      cchange = 1
       xchange = 0
     end
 
-    if (cycles - 20) % 40 == 0 
-      sum += cycles * x
-    end 
-    # puts "after: cycle: #{cycles} x: #{x + xchange}"
+    (cycles...(cycles+cchange)).each do |i|
+      print ((x-1)..(x+1)).include?(i % 40) ? "#" : "."
+      puts if (i+1) % 40 == 0 
+    end
+
     x += xchange
+    cycles += cchange
   end
-  puts sum
 end
+puts
